@@ -30,7 +30,8 @@ mkdir -p ${VER_DIR}
 
 # unpack
 ZIP_FILE=${DL_DIR}/${VERSION}.zip
-wget  -O ${ZIP_FILE} ${ZIP_URL}
+[ ! -f "${ZIP_FILE}" ] && wget  -O ${ZIP_FILE} ${ZIP_URL}
+rm -rf ${DL_DIR}/XX-Net-${VERSION}
 unzip -q ${ZIP_FILE} -d ${DL_DIR}
 UNPACK_DIR=${DL_DIR}/XX-Net-${VERSION}/code/default
 
@@ -52,7 +53,8 @@ rm -rf                           ${GAE_DIR}/local/OpenSSL
 ln -s    ${TOP_DIR}/data/OpenSSL ${GAE_DIR}/local/OpenSSL
 
 # clean
-rm -rf ${DL_DIR}
+rm -rf ${DL_DIR}/XX-Net-${VERSION}
+# rm -rf ${DL_DIR}
 
 # rc.local
 XXNET_S="python ${GAE_DIR}/local/proxy.py 2&> /dev/null &"
