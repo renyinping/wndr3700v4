@@ -65,6 +65,69 @@ base()
 	popd;
 }
 
+# download packages
+package()
+{
+	pushd ${IMAGE_BUILDER_DIR}/packages;
+	PACKAGE_URL=https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages
+	
+	rm -rf *.ipk *.ipk.* \
+	&& wget ${PACKAGE_URL}/packages/shadowsocks-client_0.5-d8ef02715f40de0fb7ba0f7267d3f8260f38ba80_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/packages/tgt_1.0.48-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/libaio_0.3.109-1_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/packages/wget_1.16-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/libpcre_8.35-2_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/packages/bash_4.2-5_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/oldpackages/hdparm_9.39-1_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/packages/unzip_6.0-2_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/oldpackages/tar_1.23-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/bzip2_1.0.6-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/libbz2_1.0.6-1_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/luci/luci-app-transmission_0.12+svn-r10530-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/transmission-daemon_2.84-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/transmission-web_2.84-1_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/luci/luci-app-samba_0.12+svn-r10530-1_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/oldpackages/python_2.7.3-2_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/oldpackages/pyopenssl_0.10-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/oldpackages/python-openssl_2.7.3-2_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/oldpackages/python-mini_2.7.3-2_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/packages/libffi_3.0.13-1_ar71xx.ipk \
+	\
+	&& wget ${PACKAGE_URL}/oldpackages/dosfsck_3.0.12-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/oldpackages/dosfslabel_3.0.12-1_ar71xx.ipk \
+	&& wget ${PACKAGE_URL}/oldpackages/mkdosfs_3.0.12-1_ar71xx.ipk
+	
+	popd;
+}
+
+# full
+TOOLS='wget ca-certificates unzip tar bash hdparm'
+FAT32='kmod-fs-vfat kmod-nls-cp437 kmod-nls-iso8859-1 dosfsck mkdosfs dosfslabel'
+SMB='luci-app-samba'
+BT='transmission-daemon luci-app-transmission transmission-web'
+XXNET='python python-openssl pyopenssl wget ca-certificates unzip bash'
+FULL="$BASE $TOOLS $SMB $BT $FAT32 $XXNET tgt shadowsocks-client "
+full()
+{
+	if [ ! -d "${IMAGE_BUILDER_DIR}" ]; then
+		image_build_system;
+	fi;
+	
+	pushd ${IMAGE_BUILDER_DIR};
+	nand128m;
+	make image PROFILE=WNDR4300 PACKAGES="${FULL}";
+	popd;
+}
+
 # files
 files()
 {
