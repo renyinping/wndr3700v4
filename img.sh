@@ -74,6 +74,8 @@ package()
 	rm -rf *.ipk *.ipk.* \
 	&& wget ${PACKAGE_URL}/packages/shadowsocks-client_0.5-d8ef02715f40de0fb7ba0f7267d3f8260f38ba80_ar71xx.ipk \
 	\
+	&& wget ${PACKAGE_URL}/packages/polipo_1.1.1-1_ar71xx.ipk \
+	\
 	&& wget ${PACKAGE_URL}/packages/tgt_1.0.48-1_ar71xx.ipk \
 	&& wget ${PACKAGE_URL}/packages/libaio_0.3.109-1_ar71xx.ipk \
 	\
@@ -115,7 +117,7 @@ FAT32='kmod-fs-vfat kmod-nls-cp437 kmod-nls-iso8859-1 dosfsck mkdosfs dosfslabel
 SMB='luci-app-samba'
 BT='transmission-daemon luci-app-transmission transmission-web'
 XXNET='python python-openssl pyopenssl wget ca-certificates unzip bash'
-FULL="$BASE $TOOLS $SMB $BT $FAT32 $XXNET tgt shadowsocks-client "
+FULL="$BASE $TOOLS $SMB $BT $XXNET shadowsocks-client polipo "
 full()
 {
 	if [ ! -d "${IMAGE_BUILDER_DIR}" ]; then
@@ -124,7 +126,7 @@ full()
 	
 	pushd ${IMAGE_BUILDER_DIR};
 	nand128m;
-	make image PROFILE=WNDR4300 PACKAGES="${FULL}";
+	make image PROFILE=WNDR4300 PACKAGES="${FULL}" FILES=files;
 	popd;
 }
 
