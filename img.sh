@@ -66,58 +66,71 @@ base()
 }
 
 # download packages
-package()
+dl_package()
 {
-	pushd ${IMAGE_BUILDER_DIR}/packages;
-	PACKAGE_URL=https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages
+	[ -z "$1" ] && echo 'The parameter DL_URL is missing.' && return 1;
+	DL_URL=$1;
+	DL_FILE=${DL_URL##*/};
 	
-	rm -rf *.ipk *.ipk.* \
-	&& wget ${PACKAGE_URL}/packages/shadowsocks-client_0.5-d8ef02715f40de0fb7ba0f7267d3f8260f38ba80_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/packages/polipo_1.1.1-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/packages/tgt_1.0.48-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/libaio_0.3.109-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/packages/wget_1.16-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/libpcre_8.35-2_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/packages/bash_4.2-5_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/oldpackages/hdparm_9.39-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/packages/unzip_6.0-2_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/oldpackages/tar_1.23-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/bzip2_1.0.6-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/libbz2_1.0.6-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/luci/luci-app-transmission_0.12+svn-r10530-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/transmission-daemon_2.84-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/transmission-web_2.84-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/luci/luci-app-samba_0.12+svn-r10530-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/oldpackages/python_2.7.3-2_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/oldpackages/pyopenssl_0.10-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/oldpackages/python-openssl_2.7.3-2_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/oldpackages/python-mini_2.7.3-2_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/packages/libffi_3.0.13-1_ar71xx.ipk \
-	\
-	&& wget ${PACKAGE_URL}/oldpackages/dosfsck_3.0.12-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/oldpackages/dosfslabel_3.0.12-1_ar71xx.ipk \
-	&& wget ${PACKAGE_URL}/oldpackages/mkdosfs_3.0.12-1_ar71xx.ipk
+	[ ! -f "${IMAGE_BUILDER_DIR}/packages/${DL_FILE}" ] && wget -O "${IMAGE_BUILDER_DIR}/packages/${DL_FILE}" "${DL_URL}";
+}
+
+get_packages()
+{
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/shadowsocks-client_0.5-d8ef02715f40de0fb7ba0f7267d3f8260f38ba80_ar71xx.ipk'
 	
-	popd;
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/polipo_1.1.1-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/tgt_1.0.48-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/libaio_0.3.109-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/wget_1.16-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/libpcre_8.35-2_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/base/ca-certificates_20141019_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/bash_4.2-5_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/hdparm_9.39-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/unzip_6.0-2_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/tar_1.23-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/bzip2_1.0.6-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/libbz2_1.0.6-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/luci/luci-app-transmission_0.12+svn-r10530-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/transmission-daemon_2.84-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/transmission-web_2.84-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/luci/luci-app-samba_0.12+svn-r10530-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/python_2.7.3-2_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/pyopenssl_0.10-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/python-openssl_2.7.3-2_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/python-mini_2.7.3-2_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/libffi_3.0.13-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/dosfsck_3.0.12-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/dosfslabel_3.0.12-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/oldpackages/mkdosfs_3.0.12-1_ar71xx.ipk'
+	
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/nfs-kernel-server-utils_1.3.0-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/nfs-kernel-server_1.3.0-1_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/portmap_6.0-4_ar71xx.ipk'
+	dl_package 'https://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/packages/packages/libwrap_7.6-1_ar71xx.ipk'
 }
 
 # full
 TOOLS='wget ca-certificates unzip tar bash hdparm'
-FAT32='kmod-fs-vfat kmod-nls-cp437 kmod-nls-iso8859-1 dosfsck mkdosfs dosfslabel'
+FAT32='kmod-fs-vfat kmod-nls-cp437 kmod-nls-iso8859-1'
+TAT32_TOOLS='dosfsck mkdosfs dosfslabel'
 SMB='luci-app-samba'
+TGT='tgt'
+NFS='nfs-kernel-server-utils'
 BT='transmission-daemon luci-app-transmission transmission-web'
 XXNET='python python-openssl pyopenssl wget ca-certificates unzip bash'
-FULL="$BASE $TOOLS $SMB $BT $XXNET shadowsocks-client polipo "
+FULL="$BASE $TOOLS $FAT32 $SMB $BT $XXNET shadowsocks-client polipo"
 full()
 {
 	if [ ! -d "${IMAGE_BUILDER_DIR}" ]; then
