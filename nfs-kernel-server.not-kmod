@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# 去除nfs-kernel-server中的kmod-fs-nfsd和kmod-fs-nfs模块依赖，因为我们已将NFS-server编译到Linux kernel中
+
+FILE='package/feeds/packages/nfs-kernel-server/Makefile'
+
+sed -i 's/DEPENDS+= +kmod-fs-nfsd +kmod-fs-nfs/DEPENDS+=/g' ${FILE}
