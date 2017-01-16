@@ -22,4 +22,4 @@ RUN git clone https://github.com/renyinping/wndr3700v4.git \
  && ../nand128m.sh \
  && tar -zxvf ../config.tar.gz 
  
- RUN make
+ RUN cd wndr3700v4/openwrt-14.07 && make
